@@ -9,8 +9,8 @@ packages = [{include = "*", from = "src"}]
 
 [tool.poetry.dependencies]
 python = "^3.12"
-circuitpython-build-tools = "^1.16.0"
 click = "^8.1.7"
+adafruit-board-toolkit = "^1.1.1"
 
 
 [tool.poetry.group.dev.dependencies]
