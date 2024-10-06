@@ -11,6 +11,7 @@ packages = [{include = "*", from = "src"}]
 python = "^3.12"
 click = "^8.1.7"
 adafruit-board-toolkit = "^1.1.1"
+semver = "^3.0.2"
 
 
 [tool.poetry.group.dev.dependencies]
