@@ -93,5 +93,42 @@ def off(ctx: click.Context):
 #     main.main("switch ts".split(), "sdwire", "_SDWIRE_COMPLETE")
 
 
+@main.group()
+@click.pass_context
+@click.option(
+    "-s",
+    "--serial",
+    required=False,
+    help="Serial number of the sdwire device, if there is only one sdwire connected then it will be used by default",
+)
+def device(ctx: click.Context, serial=None):
+    """
+    device  => show/update the firmware on the device
+    """
+    ctx.ensure_object(dict)
+    # utils.handle_device_command(ctx, serial)
+
+
+@device.group()
+@click.pass_context
+def firmware(ctx: click.Context):
+    """
+    firmware => update firmware on the selected device
+    """
+    ctx.ensure_object(dict)
+
+
+#    utils.handle_firmware_update_command(ctx)
+
+
+@firmware.command()
+@click.pass_context
+def update(ctx: click.Context):
+    """
+    update => update firmware
+    """
+    ctx.ensure_object(dict)
+
+
 if __name__ == "__main__":
     main()
