@@ -12,11 +12,10 @@ def main():
 
 @main.command()
 def list():
+
     print(f"Serial\t\t\tProduct Info")
     for sdwire in detect.get_sdwire_devices():
-        print(
-            f"{sdwire.badgerd_serial_string}\t\t[{sdwire.product_string}::{sdwire.manufacturer_string}]"
-        )
+        print(sdwire)
 
 
 @main.group()

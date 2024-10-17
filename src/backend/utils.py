@@ -1,17 +1,31 @@
+import sys
+import logging
+import click
 from backend.device.sdwire import SDWire
+from backend.device.sdwirec import SDWireC
 from backend import detect
+
+log = logging.getLogger(__name__)
 
 
 def handle_switch_host_command(ctx):
-    pass
+    device = ctx.obj["device"]
+    if isinstance(device, SDWireC):
+        device.switch_ts()
 
 
 def handle_switch_target_command(ctx):
-    pass
+    device = ctx.obj["device"]
+    if isinstance(device, SDWireC):
+        device.switch_dut()
 
 
 def handle_switch_off_command(ctx):
-    pass
+    device = ctx.obj["device"]
+    if isinstance(device, SDWireC):
+        log.info("SDWireC or legacy sdwire devices dont have off functionality")
+        print("SDWireC dont have off functionality")
+        sys.exit(1)
 
 
 def handle_switch_command(ctx, serial):
@@ -25,10 +39,11 @@ def handle_switch_command(ctx, serial):
             raise click.UsageError(
                 "There is more then 1 sdwire device connected, please use --serial|-s to specify!"
             )
+        log.info("1 sdwire/sdwirec device detected")
         ctx.obj["device"] = devices[0]
     else:
         for device in devices:
-            if device.badgerd_serial_string == serial:
+            if device.serial_string == serial:
                 ctx.obj["device"] = device
                 break
         else:
@@ -36,7 +51,6 @@ def handle_switch_command(ctx, serial):
                 f"There is no such sdwire device connected with serial={serial}"
             )
 
-    device: SDWire = ctx.obj["device"]
-    import sys
-
-    device.invoke(" ".join(sys.argv[1:]))
+    device = ctx.obj["device"]
+    if isinstance(device, SDWire):
+        device.invoke(" ".join(sys.argv[1:]))

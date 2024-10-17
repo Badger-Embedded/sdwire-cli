@@ -1,15 +1,14 @@
 from serial import Serial
-from serial.tools.list_ports_common import ListPortInfo
-from backend.device.usb_device import USBDevice
+from backend.device.usb_device import USBDevice, PortInfo
 
 
 class SDWire(USBDevice):
 
-    def __init__(self, port_info: ListPortInfo):
+    def __init__(self, port_info: PortInfo):
         super().__init__(port_info)
 
     @property
-    def badgerd_serial_string(self) -> str:
+    def serial_string(self) -> str:
         return "sdwire_gen2_101"
 
     def invoke(self, command: str) -> None:
@@ -20,7 +19,7 @@ class SDWire(USBDevice):
             channel.write(data)
 
     def __str__(self):
-        return f"{self.badgerd_serial_string} - [{self.product_string}::{self.manufacturer_string}]"
+        return f"{self.serial_string}\t\t[{self.product_string}::{self.manufacturer_string}]"
 
     def __repr__(self):
         return self.__str__()

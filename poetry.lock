@@ -133,6 +133,21 @@ test = ["appdirs (==1.4.4)", "covdefaults (>=2.3)", "pytest (>=8.3.2)", "pytest-
 type = ["mypy (>=1.11.2)"]
 
 [[package]]
+name = "pyftdi"
+version = "0.55.4"
+description = "FTDI device driver (pure Python)"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "pyftdi-0.55.4-py3-none-any.whl", hash = "sha256:64a804ea1c652e6935897df7867dbba18910848cad0a4927ccdb06813c072c85"},
+    {file = "pyftdi-0.55.4.tar.gz", hash = "sha256:cb2770b606507024a65e0a520bf892f239a36cec25cab45338ce3e3027de53c8"},
+]
+
+[package.dependencies]
+pyserial = ">=3.0"
+pyusb = ">=1.0.0,<1.2.0 || >1.2.0"
+
+[[package]]
 name = "pyserial"
 version = "3.5"
 description = "Python Serial Port Extension"
@@ -145,6 +160,28 @@ files = [
 
 [package.extras]
 cp2110 = ["hidapi"]
+
+[[package]]
+name = "pyudev"
+version = "0.24.3"
+description = "A libudev binding"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "pyudev-0.24.3-py3-none-any.whl", hash = "sha256:e8246f0a014fe370119ba2bc781bfbe62c0298d0d6b39c94e83102a8a3f56960"},
+    {file = "pyudev-0.24.3.tar.gz", hash = "sha256:2e945427a21674893bb97632401db62139d91cea1ee96137cc7b07ad22198fc7"},
+]
+
+[[package]]
+name = "pyusb"
+version = "1.2.1"
+description = "Python USB access module"
+optional = false
+python-versions = ">=3.6.0"
+files = [
+    {file = "pyusb-1.2.1-py3-none-any.whl", hash = "sha256:2b4c7cb86dbadf044dfb9d3a4ff69fd217013dbe78a792177a3feb172449ea36"},
+    {file = "pyusb-1.2.1.tar.gz", hash = "sha256:a4cc7404a203144754164b8b40994e2849fde1cfff06b08492f12fff9d9de7b9"},
+]
 
 [[package]]
 name = "semver"
@@ -160,4 +197,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "c7d614fb707e5a5e06a8910fb37db27cb6c0f110055826fb401b2f079cbf0ff9"
+content-hash = "c662532cb37834415d4ded9a9a93023f02c1853c215d5d48a6446b6930a28a9f"
