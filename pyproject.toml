@@ -1,11 +1,15 @@
 [tool.poetry]
 name = "sdwire"
-version = "0.1.1"
+version = "0.1.2"
 description = "CLI application to interact with Badgerd SDWire Gen2 devices"
 authors = ["Talha Can Havadar <havadartalha@gmail.com>"]
 license = "GPL-3"
 readme = "README.md"
-packages = [{ include = "*", from = "src" }]
+packages = [
+    { include = "constants.py", from = "sdwire" },
+    { include = "backend", from = "sdwire" },
+    { include = "sdwire" },
+]
 
 [tool.poetry.dependencies]
 python = "^3.12"
@@ -24,4 +28,4 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
-sdwire = "main:main"
+sdwire = "sdwire:main.main"
