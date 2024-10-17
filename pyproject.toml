@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "sdwire"
-version = "0.1.0"
+version = "0.1.1"
 description = "CLI application to interact with Badgerd SDWire Gen2 devices"
 authors = ["Talha Can Havadar <havadartalha@gmail.com>"]
 license = "GPL-3"
@@ -13,7 +13,6 @@ click = "^8.1.7"
 adafruit-board-toolkit = "^1.1.1"
 semver = "^3.0.2"
 pyusb = "^1.2.1"
-pyudev = "^0.24.3"
 pyftdi = "^0.55.4"
 
 
