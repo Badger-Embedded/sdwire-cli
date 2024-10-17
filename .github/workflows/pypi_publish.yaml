@@ -50,6 +50,7 @@ jobs:
     needs:
       - build
     runs-on: ubuntu-latest
+    continue-on-error: true
     environment:
       name: testpypi
       url: https://test.pypi.org/p/sdwire
