@@ -1,5 +1,5 @@
 from serial import Serial
-from backend.device.usb_device import USBDevice, PortInfo
+from .usb_device import USBDevice, PortInfo
 
 
 class SDWire(USBDevice):

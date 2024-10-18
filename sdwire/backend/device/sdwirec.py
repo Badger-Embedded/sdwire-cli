@@ -1,7 +1,7 @@
 import logging
 from pyftdi.ftdi import Ftdi
 from serial import Serial
-from backend.device.usb_device import USBDevice, PortInfo
+from .usb_device import USBDevice, PortInfo
 
 log = logging.getLogger(__name__)
 
