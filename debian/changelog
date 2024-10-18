@@ -3,10 +3,11 @@ sdwire-utils (0.2.1-0badgerd1) UNRELEASED; urgency=medium
   * fix watch file to use tags without v prefix
   * update package dependencies
   * add py3dist-overrides to fix adafruit package warning
+  * add gbp.conf file
 
- -- Talha Can Havadar <talha.can.havadar@canonical.com>  Fri, 18 Oct 2024 14:34:05 +0200
+ -- Talha Can Havadar <talha.can.havadar@canonical.com>  Fri, 18 Oct 2024 14:36:11 +0200
 
-sdwire-utils (0.2.1-0badgerd1) noble; urgency=medium
+sdwire-utils (0.2.0-0badgerd1) noble; urgency=medium
 
   * Initial release to badgerd
 
