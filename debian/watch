@@ -1,5 +1,5 @@
 version=4
 opts="filenamemangle=s/.+\/v?(\d\S+)\.tar\.gz/sdwire-cli-$1\.tar\.gz/" \
   https://github.com/Badger-Embedded/sdwire-cli/tags \
-  .*/v@ANY_VERSION@@ARCHIVE_EXT@ \
+  .*/@ANY_VERSION@@ARCHIVE_EXT@ \
   debian
