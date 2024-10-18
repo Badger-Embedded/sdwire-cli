@@ -38,6 +38,21 @@ Commands:
   ts      ts/host => connects the sdcard interface to host machine
 ```
 
+## Installing
+
+Using pip
+
+```
+pip install sdwire
+```
+
+Using apt
+
+```
+sudo add-apt-repository ppa:tchavadar/badgerd
+sudo apt install python3-sdwire
+```
+
 ## Listing SDWire Devices
 
 `sdwire list` command will search through usb devices connected to the system
