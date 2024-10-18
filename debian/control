@@ -4,9 +4,9 @@ Priority: optional
 Maintainer: Talha Can Havadar <havadartalha@gmail.com>
 Build-Depends: debhelper-compat (= 13),
                dh-python,
+               pybuild-plugin-pyproject,
                python3-all,
-               python3-poetry,
-               pybuild-plugin-pyproject
+               python3-poetry
 Testsuite: autopkgtest-pkg-python
 Standards-Version: 4.6.2
 Homepage: https://badgerd.nl/
@@ -18,7 +18,8 @@ Package: python3-sdwire
 Section: python
 Architecture: any
 Multi-Arch: foreign
-Depends: ${misc:Depends},
+Depends: python3-adafruit-board-toolkit,
+         ${misc:Depends},
          ${python3:Depends},
          ${shlibs:Depends}
 Description: auto-generated package by debmake
