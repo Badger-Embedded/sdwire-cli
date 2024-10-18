@@ -4,8 +4,9 @@ sdwire-utils (0.2.1-0badgerd1) UNRELEASED; urgency=medium
   * update package dependencies
   * add py3dist-overrides to fix adafruit package warning
   * add gbp.conf file
+  * gbp.conf: add upstream-tag configuration
 
- -- Talha Can Havadar <talha.can.havadar@canonical.com>  Fri, 18 Oct 2024 14:36:55 +0200
+ -- Talha Can Havadar <talha.can.havadar@canonical.com>  Fri, 18 Oct 2024 14:54:48 +0200
 
 sdwire-utils (0.2.0-0badgerd1) noble; urgency=medium
 
