@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 import click
-from backend import utils
-from backend import detect
-from backend.device.sdwire import SDWire
+from .backend import utils
+from .backend import detect
+from .backend.device.sdwire import SDWire
 
 
 @click.group()

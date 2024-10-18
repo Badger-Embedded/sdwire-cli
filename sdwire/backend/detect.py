@@ -3,10 +3,10 @@ from typing import List
 from adafruit_board_toolkit import circuitpython_serial as cpserial
 from serial.tools.list_ports_common import ListPortInfo
 
-import constants
-from backend.device.sdwire import SDWire
-from backend.device.sdwirec import SDWireC
-from backend.device.usb_device import PortInfo
+from sdwire import constants
+from .device.sdwire import SDWire
+from .device.sdwirec import SDWireC
+from .device.usb_device import PortInfo
 
 import usb.core
 import usb.util
