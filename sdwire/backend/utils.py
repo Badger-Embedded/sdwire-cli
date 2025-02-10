@@ -10,14 +10,12 @@ log = logging.getLogger(__name__)
 
 def handle_switch_host_command(ctx):
     device = ctx.obj["device"]
-    if isinstance(device, SDWireC):
-        device.switch_ts()
+    device.switch_ts()
 
 
 def handle_switch_target_command(ctx):
     device = ctx.obj["device"]
-    if isinstance(device, SDWireC):
-        device.switch_dut()
+    device.switch_dut()
 
 
 def handle_switch_off_command(ctx):
@@ -50,7 +48,3 @@ def handle_switch_command(ctx, serial):
             raise click.UsageError(
                 f"There is no such sdwire device connected with serial={serial}"
             )
-
-    device = ctx.obj["device"]
-    if isinstance(device, SDWire):
-        device.invoke(" ".join(sys.argv[1:]))
