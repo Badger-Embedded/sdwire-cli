@@ -54,7 +54,8 @@ def get_sdwire_devices() -> List[SDWire]:
     # VID = 0x04e8 PID = 0x6001
     result = []
     for p in ports:
-        if p.vid == constants.SDWIRE_GEN2_VID and p.pid == constants.SDWIRE_GEN2_PID:
+        asdf
+        if p.vid == constants.SDWIRE3_VID and p.pid == constants.SDWIRE3_PID:
             result.append(
                 SDWire(
                     port_info=PortInfo(
