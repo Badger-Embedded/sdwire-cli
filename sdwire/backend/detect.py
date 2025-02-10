@@ -4,7 +4,7 @@ from adafruit_board_toolkit import circuitpython_serial as cpserial
 from serial.tools.list_ports_common import ListPortInfo
 
 from sdwire import constants
-from .device.sdwire import SDWire
+from .device.sdwire import SDWire, SDWIRE_GENERATION_SDWIRE3
 from .device.sdwirec import SDWireC
 from .device.usb_device import PortInfo
 
@@ -46,21 +46,41 @@ def get_sdwirec_devices() -> List[SDWireC]:
 
 
 def get_sdwire_devices() -> List[SDWire]:
-    ports = cpserial.data_comports()
 
-    # Badgerd SDWire Gen2
-    # VID = 0x1209 PID = 0x2404
+    # Badgerd SDWire3
+    # VID = 0bda PID = 0316
     # Badgerd SDWireC
     # VID = 0x04e8 PID = 0x6001
     result = []
-    for p in ports:
-        asdf
-        if p.vid == constants.SDWIRE3_VID and p.pid == constants.SDWIRE3_PID:
+    devices: List[Device] = usb.core.find(find_all=True)
+    if not devices:
+        log.info("no usb devices found while searching for SDWire..")
+        return []
+
+    device_list = []
+    for device in devices:
+        product = None
+        serial = None
+        manufacturer = None
+        try:
+            product = device.idProduct
+            vendor = device.idVendor
+            serial = (
+                usb.util.get_string(device, device.iSerialNumber, None)
+                + f"{device.bus}{device.port_number}"
+            )
+            manufacturer = device.manufacturer
+        except Exception as e:
+            log.debug(
+                "not able to get usb product, serial_number and manufacturer information, err: %s",
+                e,
+            )
+
+        if product == constants.SDWIRE3_PID and vendor == constants.SDWIRE3_VID:
             result.append(
                 SDWire(
-                    port_info=PortInfo(
-                        p.device, p.product, p.manufacturer, p.serial_number, p
-                    )
+                    port_info=PortInfo(device, product, vendor, serial, device),
+                    generation=SDWIRE_GENERATION_SDWIRE3,
                 )
             )
     # Search for legacy SDWireC devices
