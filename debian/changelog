@@ -1,12 +1,18 @@
-sdwire-utils (0.2.1-0badgerd1) UNRELEASED; urgency=medium
+sdwire-utils (0.2.2-0badgerd1) noble; urgency=medium
 
   * fix watch file to use tags without v prefix
   * update package dependencies
   * add py3dist-overrides to fix adafruit package warning
   * add gbp.conf file
   * gbp.conf: add upstream-tag configuration
+  * doc: improve examples
+  * pypi: fix python imports
+  * doc: add installation instructions to readme
+  * pyproject: bump the version
+  * list sdwire3 devices
+  * sdwire3: add support for sdwire3
 
- -- Talha Can Havadar <talha.can.havadar@canonical.com>  Fri, 18 Oct 2024 14:54:48 +0200
+ -- Talha Can Havadar <talha.can.havadar@canonical.com>  Mon, 10 Mar 2025 13:26:18 +0100
 
 sdwire-utils (0.2.0-0badgerd1) noble; urgency=medium
 
