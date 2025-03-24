@@ -1,3 +1,9 @@
+sdwire-utils (0.2.3-0badgerd1) noble; urgency=medium
+
+  * add block dev column in sdwire list command output
+
+ -- Talha Can Havadar <talha.can.havadar@canonical.com>  Mon, 24 Mar 2025 22:36:04 +0100
+
 sdwire-utils (0.2.2-0badgerd1) noble; urgency=medium
 
   * fix watch file to use tags without v prefix
