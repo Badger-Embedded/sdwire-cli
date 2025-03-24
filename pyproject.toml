@@ -14,6 +14,7 @@ adafruit-board-toolkit = "^1.1.1"
 semver = "^3.0.2"
 pyusb = "^1.2.1"
 pyftdi = "^0.55.4"
+pyudev = "^0.24.3"
 
 
 [tool.poetry.group.dev.dependencies]

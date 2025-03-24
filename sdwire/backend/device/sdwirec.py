@@ -7,17 +7,31 @@ log = logging.getLogger(__name__)
 
 
 class SDWireC(USBDevice):
+    __block_dev = None
 
     def __init__(self, port_info: PortInfo):
         super().__init__(port_info)
+        for d in self._pyudev_context.list_devices(ID_MODEL="sd-wire"):
+            d_serial = d.get("ID_USB_SERIAL_SHORT", None)
+            if d_serial is not None and d_serial == self.serial_string:
+                for sibling in d.parent.children:
+                    if (
+                        d.device_path != sibling.device_path
+                        and sibling.device_type == "disk"
+                    ):
+                        self.__block_dev = f"/dev/{sibling.device_path.split("/")[-1]}"
+                        break
+                break
 
     def __str__(self):
-        return (
-            f"{self.serial_string}\t[{self.product_string}::{self.manufacturer_string}]"
-        )
+        return f"{self.serial_string}\t[{self.product_string}::{self.manufacturer_string}]\t{self.block_dev}"
 
     def __repr__(self):
         return self.__str__()
+
+    @property
+    def block_dev(self):
+        return self.__block_dev
 
     def switch_ts(self):
         self._set_sdwire(1)

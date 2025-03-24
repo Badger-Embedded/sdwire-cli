@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import logging
 import click
 from .backend import utils
 from .backend import detect
@@ -6,14 +7,15 @@ from .backend.device.sdwire import SDWire
 
 
 @click.group()
-def main():
-    pass
+@click.option("--debug", required=False, is_flag=True, help="Enable debug output")
+def main(debug=None):
+    if debug:
+        logging.basicConfig(level=logging.DEBUG)
 
 
 @main.command()
 def list():
-
-    print(f"Serial\t\t\tProduct Info")
+    print(f"Serial\t\t\tProduct Info\t\tBlock Dev")
     for sdwire in detect.get_sdwire_devices():
         print(sdwire)
 
