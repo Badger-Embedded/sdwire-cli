@@ -162,6 +162,17 @@ files = [
 cp2110 = ["hidapi"]
 
 [[package]]
+name = "pyudev"
+version = "0.24.3"
+description = "A libudev binding"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "pyudev-0.24.3-py3-none-any.whl", hash = "sha256:e8246f0a014fe370119ba2bc781bfbe62c0298d0d6b39c94e83102a8a3f56960"},
+    {file = "pyudev-0.24.3.tar.gz", hash = "sha256:2e945427a21674893bb97632401db62139d91cea1ee96137cc7b07ad22198fc7"},
+]
+
+[[package]]
 name = "pyusb"
 version = "1.2.1"
 description = "Python USB access module"
@@ -186,4 +197,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "c61936c9ccf80594827f2143bbe271ba5f5cd18d167c6a04cf01301c86e08813"
+content-hash = "c662532cb37834415d4ded9a9a93023f02c1853c215d5d48a6446b6930a28a9f"
