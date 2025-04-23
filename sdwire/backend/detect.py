@@ -1,7 +1,5 @@
 import logging
 from typing import List
-from adafruit_board_toolkit import circuitpython_serial as cpserial
-from serial.tools.list_ports_common import ListPortInfo
 
 from sdwire import constants
 from .device.sdwire import SDWire, SDWIRE_GENERATION_SDWIRE3
@@ -47,7 +45,6 @@ def get_sdwirec_devices() -> List[SDWireC]:
 
 
 def get_sdwire_devices() -> List[SDWire]:
-
     # Badgerd SDWire3
     # VID = 0bda PID = 0316
     # Badgerd SDWireC
@@ -70,11 +67,11 @@ def get_sdwire_devices() -> List[SDWire]:
         bus = None
         address = None
         try:
-            product = int(f"0x{device.get("ID_MODEL_ID")}", 16)
-            vendor = int(f"0x{device.get("ID_VENDOR_ID")}", 16)
+            product = int(f"0x{device.get('ID_MODEL_ID')}", 16)
+            vendor = int(f"0x{device.get('ID_VENDOR_ID')}", 16)
             bus = int(device.get("BUSNUM"))
             address = int(device.get("DEVNUM"))
-            serial = f"{device.get("ID_USB_SERIAL_SHORT")}:{bus}.{address}"
+            serial = f"{device.get('ID_USB_SERIAL_SHORT')}:{bus}.{address}"
             manufacturer = ""
         except Exception as e:
             log.debug(
