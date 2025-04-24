@@ -21,8 +21,8 @@
         pkgs = import nixpkgs { inherit system; };
       in
       {
-        # packages.default = pkgs.callPackage ./default.nix { };
-        packages.default = pkgs.python3Packages.callPackage ./default.nix { };
+        packages.default = pkgs.callPackage ./default.nix { };
+        # packages.default = pkgs.python3Packages.callPackage ./default.nix { };
 
         devShells.default = pkgs.mkShell {
           packages = with pkgs; [

@@ -1,32 +1,28 @@
 {
   lib,
-  buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
-  python,
-  pythonRelaxDepsHook,
-  pythonOlder,
+  python3,
   ...
 }@args:
 
-buildPythonPackage rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "sdwire-cli";
   version = "0.2.4-dev";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = python3.pkgs.pythonOlder "3.10";
   src = fetchFromGitHub {
     owner = "badger-embedded";
     repo = pname;
     rev = "main";
-    hash = "sha256-Ztp3RzqLE6NSCZGjOaemC62jaGSgPPxDe1esNTfF75c=";
+    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with python3.pkgs; [
     poetry-core
   ];
 
-  propagatedBuildInputs = with python.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     click
     pyusb
     pyftdi
