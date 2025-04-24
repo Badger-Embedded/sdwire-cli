@@ -9,36 +9,22 @@
   ...
 }@args:
 
-# let
-#   # If you need to relax dependencies (common with Poetry projects)
-#   relaxedDeps = [ "some-dependency" ]; # Add your problematic dependencies here
-# in
-
 buildPythonPackage rec {
   pname = "sdwire-cli";
-  version = "0.2.4";
+  version = "0.2.4-dev";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
   src = fetchFromGitHub {
-    owner = "talhaHavadar";
+    owner = "badger-embedded";
     repo = pname;
-    rev = "main"; # or your commit hash
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    rev = "main";
+    hash = "sha256-Ztp3RzqLE6NSCZGjOaemC62jaGSgPPxDe1esNTfF75c=";
   };
-
-  # postPatch = ''
-  #   # Remove dependency constraints that might cause issues in Nix
-  #   substituteInPlace pyproject.toml \
-  #     --replace 'some-dependency = "^1.2.3"' 'some-dependency = "*"'
-  # '';
 
   nativeBuildInputs = [
     poetry-core
-    # pythonRelaxDepsHook
   ];
-
-  # pythonRelaxDeps = relaxedDeps;
 
   propagatedBuildInputs = with python.pkgs; [
     click
