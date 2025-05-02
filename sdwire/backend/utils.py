@@ -20,9 +20,11 @@ def handle_switch_target_command(ctx):
 
 def handle_switch_off_command(ctx):
     device = ctx.obj["device"]
-    if isinstance(device, SDWireC):
-        log.info("SDWireC or legacy sdwire devices dont have off functionality")
-        print("SDWireC dont have off functionality")
+    if isinstance(device, SDWireC) or isinstance(device, SDWire):
+        log.info(
+            "SDWire3, SDWireC or legacy sdwire devices dont have off functionality"
+        )
+        print("SDWireC and SDWire3 dont have off functionality implemented")
         sys.exit(1)
 
 

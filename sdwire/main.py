@@ -3,7 +3,6 @@ import logging
 import click
 from .backend import utils
 from .backend import detect
-from .backend.device.sdwire import SDWire
 
 
 @click.group()
@@ -15,7 +14,7 @@ def main(debug=None):
 
 @main.command()
 def list():
-    print(f"Serial\t\t\tProduct Info\t\tBlock Dev")
+    print("Serial\t\t\tProduct Info\t\tBlock Dev")
     for sdwire in detect.get_sdwire_devices():
         print(sdwire)
 
@@ -88,11 +87,6 @@ def off(ctx: click.Context):
     """
     ctx.ensure_object(dict)
     utils.handle_switch_off_command(ctx)
-
-
-# investigate further to use click in circuitpython
-# def invoke():
-#     main.main("switch ts".split(), "sdwire", "_SDWIRE_COMPLETE")
 
 
 if __name__ == "__main__":

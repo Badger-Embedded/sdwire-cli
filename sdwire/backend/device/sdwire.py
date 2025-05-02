@@ -1,5 +1,4 @@
 import logging
-from serial import Serial
 from .usb_device import USBDevice, PortInfo
 
 log = logging.getLogger(__name__)

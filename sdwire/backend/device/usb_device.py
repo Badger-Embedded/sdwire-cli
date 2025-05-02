@@ -1,6 +1,5 @@
 from collections import namedtuple
 import pyudev
-from serial.tools.list_ports_common import ListPortInfo
 
 PortInfo = namedtuple(
     "PortInfo", ("device", "product", "manufacturer", "serial", "usb_device")

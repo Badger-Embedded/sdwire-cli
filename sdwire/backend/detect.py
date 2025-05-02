@@ -59,11 +59,9 @@ def get_sdwire_devices() -> List[SDWire]:
         log.info("no usb devices found while searching for SDWire..")
         return []
 
-    device_list = []
     for device in devices:
         product = None
         serial = None
-        manufacturer = None
         bus = None
         address = None
         try:
@@ -72,7 +70,6 @@ def get_sdwire_devices() -> List[SDWire]:
             bus = int(device.get("BUSNUM"))
             address = int(device.get("DEVNUM"))
             serial = f"{device.get('ID_USB_SERIAL_SHORT')}:{bus}.{address}"
-            manufacturer = ""
         except Exception as e:
             log.debug(
                 "not able to get usb product, serial_number and manufacturer information, err: %s",
