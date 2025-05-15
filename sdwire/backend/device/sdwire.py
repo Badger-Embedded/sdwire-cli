@@ -17,7 +17,7 @@ class SDWire(USBDevice):
                 self.dev_string.device_path != sibling.device_path
                 and sibling.device_type == "disk"
             ):
-                self.__block_dev = f"/dev/{sibling.device_path.split("/")[-1]}"
+                self.__block_dev = f"/dev/{sibling.device_path.split('/')[-1]}"
                 break
 
     def switch_ts(self):
