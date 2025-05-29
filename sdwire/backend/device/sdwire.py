@@ -12,12 +12,12 @@ class SDWire(USBDevice):
     def __init__(self, port_info: PortInfo, generation: int):
         super().__init__(port_info)
         self.generation = generation
-        for sibling in self.dev_string.parent.children:
+        for child in self.dev_string.children:
             if (
-                self.dev_string.device_path != sibling.device_path
-                and sibling.device_type == "disk"
+                self.dev_string.device_path != child.device_path
+                and child.device_type == "disk"
             ):
-                self.__block_dev = f"/dev/{sibling.device_path.split('/')[-1]}"
+                self.__block_dev = f"/dev/{child.device_path.split('/')[-1]}"
                 break
 
     def switch_ts(self):
