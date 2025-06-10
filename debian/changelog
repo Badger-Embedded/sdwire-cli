@@ -1,3 +1,9 @@
+sdwire-utils (0.2.4-0badgerd1) UNRELEASED; urgency=medium
+
+  * New upstream version 0.2.4
+
+ -- Talha Can Havadar <talha.can.havadar@canonical.com>  Tue, 10 Jun 2025 21:37:22 +0000
+
 sdwire-utils (0.2.3-0badgerd1) noble; urgency=medium
 
   * add block dev column in sdwire list command output
