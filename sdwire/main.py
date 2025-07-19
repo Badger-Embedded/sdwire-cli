@@ -1,19 +1,29 @@
 #!/usr/bin/env python
+"""SDWire CLI main entry point.
+
+This module provides the command-line interface for controlling SDWire devices,
+including listing devices and switching between host and DUT modes.
+"""
 import logging
+from typing import Optional
+import importlib.metadata
 import click
-from .backend import utils
-from .backend import detect
+from sdwire.backend import utils
+from sdwire.backend import detect
 
 
 @click.group()
 @click.option("--debug", required=False, is_flag=True, help="Enable debug output")
-def main(debug=None):
+@click.version_option(version=importlib.metadata.version("sdwire"), prog_name="sdwire")
+def main(debug: Optional[bool] = None) -> None:
+    """SDWire CLI - Control SDWire devices from command line."""
     if debug:
         logging.basicConfig(level=logging.DEBUG)
 
 
 @main.command()
-def list():
+def list() -> None:
+    """List all connected SDWire devices with their block device information."""
     print("Serial\t\t\tProduct Info\t\tBlock Dev")
     for sdwire in detect.get_sdwire_devices():
         print(sdwire)
