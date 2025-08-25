@@ -1,8 +1,8 @@
-sdwire-utils (0.2.4-0badgerd1) UNRELEASED; urgency=medium
+sdwire-utils (0.2.5-0badgerd1) UNRELEASED; urgency=medium
 
-  * New upstream version 0.2.4
+  * New upstream version 0.2.5
 
- -- Talha Can Havadar <talha.can.havadar@canonical.com>  Tue, 10 Jun 2025 21:37:22 +0000
+ -- Talha Can Havadar <talha.can.havadar@canonical.com>  Mon, 25 Aug 2025 18:15:02 +0200
 
 sdwire-utils (0.2.3-0badgerd1) noble; urgency=medium
 
