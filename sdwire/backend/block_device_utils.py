@@ -302,7 +302,9 @@ def _is_block_device_match_linux(
                 # Typical path: /sys/devices/pci.../usb1/1-2/1-2.3/...
                 # We look for patterns like "1-2.3" which indicate USB bus 1,
                 # port path 2.3
-                usb_match = re.search(r"/usb(\d+)/(\d+)-([0-9.]+)/", device_path)
+                usb_match = re.search(
+                    r"/usb(\d+)/.*/(\d+)-([0-9.]+):.*/host", device_path
+                )
                 if usb_match:
                     bus_num = int(usb_match.group(1))
                     port_path = usb_match.group(3)

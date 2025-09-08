@@ -3,7 +3,10 @@ from typing import Optional
 from pyftdi.ftdi import Ftdi
 import usb.core
 from sdwire.backend.device.usb_device import USBDevice, PortInfo
-from sdwire.backend.block_device_utils import map_usb_device_to_block_device, find_sibling_storage_device
+from sdwire.backend.block_device_utils import (
+    map_usb_device_to_block_device,
+    find_sibling_storage_device,
+)
 
 log = logging.getLogger(__name__)
 
@@ -34,7 +37,7 @@ class SDWireC(USBDevice):
 
     def __str__(self) -> str:
         block_dev_str = self.block_dev if self.block_dev is not None else "None"
-        return f"{self.serial_string}\t[{self.product_string}::{self.manufacturer_string}]\t{block_dev_str}"
+        return f"{self.serial_string:<30}[{self.product_string}::{self.manufacturer_string}]\t\t{block_dev_str}"
 
     def __repr__(self) -> str:
         return self.__str__()
@@ -66,6 +69,7 @@ class SDWireC(USBDevice):
         if not self.usb_device:
             log.error("USB device not available")
             import sys
+
             print("USB device not available")
             sys.exit(1)
 
@@ -77,6 +81,7 @@ class SDWireC(USBDevice):
             ftdi.close()
         except Exception as e:
             import sys
+
             log.debug("error while updating ftdi device: %s", e, exc_info=True)
             print("couldnt switch sdwire device")
             sys.exit(1)
