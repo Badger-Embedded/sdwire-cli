@@ -24,7 +24,7 @@ def main(debug: Optional[bool] = None) -> None:
 @main.command()
 def list() -> None:
     """List all connected SDWire devices with their block device information."""
-    print("Serial\t\t\tProduct Info\t\tBlock Dev")
+    print(f"{'Serial':<30}Product Info\t\tBlock Dev")
     for sdwire in detect.get_sdwire_devices():
         print(sdwire)
 

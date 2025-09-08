@@ -79,7 +79,7 @@ class SDWire(USBDevice):
 
     def __str__(self) -> str:
         block_dev_str = self.block_dev if self.block_dev is not None else "None"
-        return f"{self.serial_string}\t[{int(self.manufacturer_string):04x}::{int(self.product_string):04x}]\t\t{block_dev_str}"
+        return f"{self.serial_string:<30}[{int(self.manufacturer_string):04x}::{int(self.product_string):04x}]\t\t{block_dev_str}"
 
     def __repr__(self) -> str:
         return self.__str__()

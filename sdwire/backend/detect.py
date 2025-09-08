@@ -98,7 +98,12 @@ def get_sdwire_devices() -> List[Union[SDWire, SDWireC]]:
                 bus = getattr(device, "bus", None)
                 address = getattr(device, "address", None)
                 serial_num = getattr(device, "serial_number", None) or "unknown"
-                serial = f"{serial_num}:{bus}.{address}"
+                port_numbers = getattr(device, "port_numbers", None)
+                serial = (
+                    f"{serial_num}.{'.'.join(map(str, port_numbers))}"
+                    if port_numbers
+                    else f"{serial_num}:{bus}.{address}"
+                )
             except Exception as e:
                 log.debug(
                     "not able to get usb product, serial_number and manufacturer information, err: %s",
