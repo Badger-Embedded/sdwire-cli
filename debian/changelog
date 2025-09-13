@@ -4,8 +4,11 @@ sdwire-utils (0.3.0-0badgerd1) UNRELEASED; urgency=medium
   * sdwire: remove pyudev dependency
   * sdwire3: use portnumbers to have more robust identification
   * sdwire3: sdwirec: make block device detection more robust in linux
+  * debian: add python click,usb and ftdi as build dependency
+  * d/control: add description to python3-sdwire
+  * d/python3-sdwire.udev: add udev rules for SDWireC
 
- -- Talha Can Havadar <talha.can.havadar@canonical.com>  Tue, 09 Sep 2025 14:20:29 +0200
+ -- Talha Can Havadar <talha.can.havadar@canonical.com>  Sat, 13 Sep 2025 10:36:46 +0000
 
 sdwire-utils (0.2.3-0badgerd1) noble; urgency=medium
 
