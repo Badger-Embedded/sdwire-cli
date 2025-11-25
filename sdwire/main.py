@@ -29,6 +29,20 @@ def list() -> None:
         print(sdwire)
 
 
+@main.command()
+@click.pass_context
+@click.option(
+    "-s",
+    "--serial",
+    required=False,
+    help="Serial number of the sdwire device, if there is only one sdwire connected then it will be used by default",
+)
+def state(ctx: click.Context, serial=None):
+    """Query and display the state of all connected SDWire devices."""
+    ctx.ensure_object(dict)
+    utils.handle_state_command(ctx, serial)
+
+
 @main.group()
 @click.pass_context
 @click.option(

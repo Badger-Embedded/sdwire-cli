@@ -17,6 +17,20 @@ class SDWire(USBDevice):
         self.generation = generation
         self._update_block_device()
 
+    def query_device_state(self):
+        if not self.usb_device:
+            log.error("USB device not available")
+            return
+
+        try:
+            state = self.usb_device.is_kernel_driver_active(0)
+            return state
+        except Exception as e:
+            log.debug(
+                "not able to query device state. err: %s",
+                e,
+            )
+
     def switch_ts(self) -> None:
         if not self.usb_device:
             log.error("USB device not available")
