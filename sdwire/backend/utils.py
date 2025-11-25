@@ -82,3 +82,50 @@ def handle_switch_command(ctx, serial):
             raise click.UsageError(
                 f"There is no such sdwire device connected with serial={serial}"
             )
+
+
+def handle_state_command(ctx, serial):
+    """Handle querying device state.
+
+    Args:
+        ctx: Click context containing device information
+        serial: Serial number of the device to query
+    """
+
+    devices = detect.get_sdwire_devices()
+
+    if serial is None:
+        # check the devices
+        if len(devices) == 0:
+            raise click.UsageError("There is no sdwire device connected!")
+        if len(devices) > 1:
+            raise click.UsageError(
+                "There is more then 1 sdwire device connected, please use --serial|-s to specify!"
+            )
+        log.info("1 sdwire/sdwirec device detected")
+        ctx.obj["device"] = devices[0]
+    else:
+        for device in devices:
+            if device.serial_string == serial:
+                ctx.obj["device"] = device
+                break
+        else:
+            raise click.UsageError(
+                f"There is no such sdwire device connected with serial={serial}"
+            )
+
+    device = ctx.obj["device"]
+    if isinstance(device, (SDWireC)):
+        log.info(
+            "SDWireC or legacy sdwire devices don't have state functionality"
+        )
+        print("SDWireC don't have state functionality implemented")
+        sys.exit(1)
+    try:
+        state = device.query_device_state()
+        print(f"{'Serial':<30}\tState")
+        print(f"{device.serial_string}:\t\tHost" if state else "Target")
+    except Exception as e:
+        log.error(f"Failed to get device state: {e}")
+        print(f"Error: Failed to get device state: {e}")
+        sys.exit(1)
