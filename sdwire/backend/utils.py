@@ -124,7 +124,7 @@ def handle_state_command(ctx, serial):
     try:
         state = device.query_device_state()
         print(f"{'Serial':<30}\tState")
-        print(f"{device.serial_string}:\t\tHost" if state else "Target")
+        print(f"{device.serial_string:<30}\t{'Host' if state else 'Target'}")
     except Exception as e:
         log.error(f"Failed to get device state: {e}")
         print(f"Error: Failed to get device state: {e}")
