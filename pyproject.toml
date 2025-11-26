@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "sdwire"
-version = "0.3.0"
+version = "0.3.1"
 description = "CLI application to interact with Badgerd SDWire devices"
 authors = ["Talha Can Havadar <havadartalha@gmail.com>"]
 license = "GPL-3"
