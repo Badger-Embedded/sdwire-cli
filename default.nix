@@ -1,32 +1,28 @@
 {
   lib,
-  fetchFromGitHub,
   python3,
   ...
-}@args:
+}:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   pname = "sdwire-cli";
-  version = "0.2.4-dev";
+  version = "0.3.1";
   pyproject = true;
 
   disabled = python3.pkgs.pythonOlder "3.10";
-  src = fetchFromGitHub {
-    owner = "badger-embedded";
-    repo = pname;
-    rev = "main";
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
-  };
+  src = ./.;
 
   nativeBuildInputs = with python3.pkgs; [
     poetry-core
+    pythonRelaxDepsHook
   ];
+
+  pythonRelaxDeps = [ "pyftdi" ];
 
   propagatedBuildInputs = with python3.pkgs; [
     click
     pyusb
     pyftdi
-    pyudev
   ];
 
   pythonImportsCheck = [ "sdwire" ];
@@ -35,6 +31,7 @@ python3.pkgs.buildPythonApplication rec {
     description = "CLI for Badgerd SDWire Devices";
     homepage = "https://github.com/Badger-Embedded/sdwire-cli";
     license = licenses.gpl3;
+    mainProgram = "sdwire";
     maintainers = with maintainers; [ talhaHavadar ];
   };
 }
