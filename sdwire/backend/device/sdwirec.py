@@ -7,6 +7,11 @@ from sdwire.backend.block_device_utils import (
     map_usb_device_to_block_device,
     find_sibling_storage_device,
 )
+from sdwire.constants import (
+    PRINT_SERIAL_SECTION_WIDTH,
+    PRINT_PRODUCT_INFO_SECTION_WIDTH,
+    PRINT_BLOCK_DEV_SECTION_WIDTH,
+)
 
 log = logging.getLogger(__name__)
 
@@ -37,7 +42,8 @@ class SDWireC(USBDevice):
 
     def __str__(self) -> str:
         block_dev_str = self.block_dev if self.block_dev is not None else "None"
-        return f"{self.serial_string:<30}[{self.product_string}::{self.manufacturer_string}]\t\t{block_dev_str}"
+        product_info_section = f"[{self.product_string}::{self.manufacturer_string}]"
+        return f"{self.serial_string:<{PRINT_SERIAL_SECTION_WIDTH}}{product_info_section:<{PRINT_PRODUCT_INFO_SECTION_WIDTH}}{block_dev_str:<{PRINT_BLOCK_DEV_SECTION_WIDTH}}"
 
     def __repr__(self) -> str:
         return self.__str__()

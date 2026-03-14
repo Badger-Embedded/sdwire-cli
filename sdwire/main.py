@@ -10,6 +10,11 @@ import importlib.metadata
 import click
 from sdwire.backend import utils
 from sdwire.backend import detect
+from sdwire.constants import (
+    PRINT_SERIAL_SECTION_WIDTH,
+    PRINT_PRODUCT_INFO_SECTION_WIDTH,
+    PRINT_BLOCK_DEV_SECTION_WIDTH,
+)
 
 
 @click.group()
@@ -24,7 +29,9 @@ def main(debug: Optional[bool] = None) -> None:
 @main.command()
 def list() -> None:
     """List all connected SDWire devices with their block device information."""
-    print(f"{'Serial':<30}Product Info\t\tBlock Dev")
+    print(
+        f"{'Serial':<{PRINT_SERIAL_SECTION_WIDTH}}{'Product Info':<{PRINT_PRODUCT_INFO_SECTION_WIDTH}}{'Block Dev':<{PRINT_BLOCK_DEV_SECTION_WIDTH}}"
+    )
     for sdwire in detect.get_sdwire_devices():
         print(sdwire)
 
