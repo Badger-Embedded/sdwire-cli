@@ -1,4 +1,23 @@
-sdwire-utils (0.3.0-0badgerd1) UNRELEASED; urgency=medium
+sdwire-utils (0.3.1-0badgerd2) stonking; urgency=medium
+
+  [ Peter Johennecken ]
+  * sdwire3: command to query the current state
+
+  [ pjohennecken-WTK ]
+  * Update sdwire/backend/utils.py
+
+  [ Talha Can Havadar ]
+  * pyproject: bump version to 0.3.1
+  * d/watch: update to version 5
+  * d/gbp.conf: fix upstream-tag config
+  * New upstream version 0.3.1
+
+  [ adeci ]
+  * fix nix packaging: use local src, update deps, relax pyftdi constraint
+
+ -- Talha Can Havadar <havadartalha@gmail.com>  Sun, 31 May 2026 01:36:46 +0000
+
+sdwire-utils (0.3.0-0badgerd1) resolute; urgency=medium
 
   * New upstream version 0.3.0
   * sdwire: remove pyudev dependency
