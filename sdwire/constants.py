@@ -5,3 +5,7 @@ SDWIREC_PID = 0x6001
 SDWIREC_PRODUCT_STRING = "sd-wire"
 
 USB_MASS_STORAGE_CLASS_ID = 8
+
+# block-dev waits this long for a usable block device after switching to host
+BLOCK_DEV_WAIT_TIMEOUT = 5.0
+BLOCK_DEV_POLL_INTERVAL = 0.25

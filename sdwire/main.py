@@ -43,6 +43,31 @@ def state(ctx: click.Context, serial=None):
     utils.handle_state_command(ctx, serial)
 
 
+@main.command("block-dev")
+@click.pass_context
+@click.option(
+    "-s",
+    "--serial",
+    required=False,
+    help="Serial number of the sdwire device, if there is only one sdwire connected then it will be used by default",
+)
+def block_dev(ctx: click.Context, serial=None):
+    """Print the block device path of the SD card, for use in scripts.
+
+    Only the path (e.g. /dev/sdb) is printed to stdout; errors and warnings go
+    to stderr. Right after switching to host it waits up to 5 seconds for the
+    block device to become usable. Exits with 1 when the device is in target
+    mode or no usable block device appears.
+
+    \b
+    Examples:
+        bmaptool copy disk.img "$(sdwire block-dev -s <serial>)"
+        sdwire switch host && dev=$(sdwire block-dev) && dd if=disk.img of="$dev" bs=4M
+    """
+    ctx.ensure_object(dict)
+    utils.handle_block_dev_command(ctx, serial)
+
+
 @main.group()
 @click.pass_context
 @click.option(

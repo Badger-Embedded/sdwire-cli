@@ -6,10 +6,13 @@ import usb.util
 from sdwire.backend.block_device_utils import map_usb_device_to_block_device
 from sdwire.backend.device.power import PowerManagementError, UsbPower
 from sdwire.backend.device.usb_device import PortInfo, USBDevice
+from sdwire.backend.device.usb_sysfs import UsbSysfs
 
 log = logging.getLogger(__name__)
 
 SDWIRE_GENERATION_SDWIRE3 = 2
+# runtime suspend takes a moment after the driver is detached
+SUSPEND_SETTLE_TIMEOUT = 0.5
 
 
 class SDWire(USBDevice):
@@ -27,20 +30,30 @@ class SDWire(USBDevice):
             getattr(self.usb_device, "port_numbers", None),
         )
 
-    def query_device_state(self):
+    @property
+    def sysfs(self) -> UsbSysfs:
+        return UsbSysfs.for_device(self.usb_device)
+
+    def state(self) -> bool:
         """Return True when in host mode, False when in target mode."""
         if not self.usb_device:
             raise RuntimeError("USB device not available")
 
-        try:
-            host_attached = bool(self.usb_device.is_kernel_driver_active(0))
-        except NotImplementedError as e:
-            raise RuntimeError("state query is not supported on this platform") from e
+        host_attached = self.sysfs.interface_driver_bound(0)
+        if host_attached is None:
+            try:
+                host_attached = bool(self.usb_device.is_kernel_driver_active(0))
+            except NotImplementedError as e:
+                raise RuntimeError(
+                    "state query is not supported on this platform"
+                ) from e
+            finally:
+                self._release_usb_handle()
         power = self.power
         if (
             not host_attached
             and power.available
-            and power.runtime_status != "suspended"
+            and not power.wait_for_status("suspended", timeout=SUSPEND_SETTLE_TIMEOUT)
         ):
             log.warning(
                 "driver is detached but the device is not runtime-suspended "
@@ -118,6 +131,10 @@ class SDWire(USBDevice):
 
     @property
     def block_dev(self) -> str | None:
+        return self.__block_dev
+
+    def refresh_block_device(self) -> str | None:
+        self._update_block_device()
         return self.__block_dev
 
     @property

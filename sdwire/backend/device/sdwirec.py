@@ -46,6 +46,10 @@ class SDWireC(USBDevice):
     def block_dev(self) -> Optional[str]:
         return self.__block_dev
 
+    def refresh_block_device(self) -> Optional[str]:
+        self._update_block_device()
+        return self.__block_dev
+
     @property
     def storage_device(self) -> Optional[usb.core.Device]:
         """Return the USB device that corresponds to the storage interface.
