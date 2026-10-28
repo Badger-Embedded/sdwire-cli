@@ -17,6 +17,8 @@ import usb.util
 
 log = logging.getLogger(__name__)
 
+USB_HUB_CLASS = 9
+
 
 def get_sdwirec_devices() -> List[SDWireC]:
     """Detect and return all connected SDWireC devices.
@@ -25,7 +27,11 @@ def get_sdwirec_devices() -> List[SDWireC]:
         List of SDWireC device instances found on the system
     """
     try:
-        found_devices = usb.core.find(find_all=True)
+        # skip hubs: opening one blocks while the kernel enumerates a child port
+        found_devices = usb.core.find(
+            find_all=True,
+            custom_match=lambda d: d.bDeviceClass != USB_HUB_CLASS,
+        )
         devices = list(found_devices or [])
     except Exception as e:
         log.debug("Error finding USB devices: %s", e)

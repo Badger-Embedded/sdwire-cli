@@ -94,3 +94,19 @@ bdgrd_sdwirec_522	[sd-wire::SRPOL]
 
 ❯ sdwire switch host
 ```
+
+### SDWire3 and Linux USB power management
+
+On Linux, the SDWire3 only hands the SD card to the target while the USB device
+is runtime-suspended. `sdwire switch target` enables this automatically
+(`power/autosuspend_delay_ms=0`, `power/control=auto`) and verifies that
+`power/runtime_status` becomes `suspended`; otherwise it exits with an error.
+Writing to sysfs requires root, or install `udev/90-sdwire.rules`, which applies
+the setting when the device is plugged in.
+
+To do it by hand (replace `2-8` with your device's sysfs name, e.g. `5-1`):
+
+```
+echo 0    | sudo tee /sys/bus/usb/devices/2-8/power/autosuspend_delay_ms
+echo auto | sudo tee /sys/bus/usb/devices/2-8/power/control
+```
