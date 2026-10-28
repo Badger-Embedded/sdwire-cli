@@ -3,5 +3,8 @@
 # rules for SDWire3
 SUBSYSTEM=="usb", ATTRS{idVendor}=="0bda", ATTRS{idProduct}=="0316", MODE="0666", GROUP="plugdev"
 
+# rules for SDWireC
+SUBSYSTEM=="usb", ATTRS{idVendor}=="04e8", ATTRS{idProduct}=="6001", MODE="0660", GROUP="plugdev"
+
 # runtime autosuspend is required to switch the SD card to the target side
 SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTR{idVendor}=="0bda", ATTR{idProduct}=="0316", TEST=="power/control", ATTR{power/autosuspend_delay_ms}="0", ATTR{power/control}="auto"
