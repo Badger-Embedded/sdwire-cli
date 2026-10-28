@@ -11,6 +11,7 @@ from sdwire import constants
 from sdwire.backend.device.sdwire import SDWire, SDWIRE_GENERATION_SDWIRE3
 from sdwire.backend.device.sdwirec import SDWireC
 from sdwire.backend.device.usb_device import PortInfo
+from sdwire.backend.device.usb_sysfs import UsbSysfs
 
 import usb.core
 import usb.util
@@ -18,6 +19,25 @@ import usb.util
 log = logging.getLogger(__name__)
 
 USB_HUB_CLASS = 9
+
+
+def read_usb_strings(device) -> tuple:
+    """Return (manufacturer, product, serial) string descriptors of a USB device.
+
+    Uses sysfs when available so the device is not resumed from runtime
+    suspend, otherwise falls back to libusb and releases the handle right away.
+    """
+    sysfs = UsbSysfs.for_device(device)
+    if sysfs.available:
+        return sysfs.attr("manufacturer"), sysfs.attr("product"), sysfs.attr("serial")
+    try:
+        return (
+            getattr(device, "manufacturer", None),
+            getattr(device, "product", None),
+            getattr(device, "serial_number", None),
+        )
+    finally:
+        usb.util.dispose_resources(device)
 
 
 def get_sdwirec_devices() -> List[SDWireC]:
@@ -47,10 +67,7 @@ def get_sdwirec_devices() -> List[SDWireC]:
         serial = None
         manufacturer = None
         try:
-            # Safe attribute access
-            product = getattr(device, "product", None)
-            serial = getattr(device, "serial_number", None)
-            manufacturer = getattr(device, "manufacturer", None)
+            manufacturer, product, serial = read_usb_strings(device)
         except Exception as e:
             log.debug(
                 "not able to get usb product, serial_number and manufacturer information, err: %s",
@@ -103,7 +120,7 @@ def get_sdwire_devices() -> List[Union[SDWire, SDWireC]]:
                 vendor = getattr(device, "idVendor", None)
                 bus = getattr(device, "bus", None)
                 address = getattr(device, "address", None)
-                serial_num = getattr(device, "serial_number", None) or "unknown"
+                serial_num = read_usb_strings(device)[2] or "unknown"
                 port_numbers = getattr(device, "port_numbers", None)
                 serial = (
                     f"{serial_num}.{'.'.join(map(str, port_numbers))}"
