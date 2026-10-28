@@ -6,7 +6,7 @@
 
 python3.pkgs.buildPythonApplication {
   pname = "sdwire-cli";
-  version = "0.3.1";
+  version = "0.4.0";
   pyproject = true;
 
   disabled = python3.pkgs.pythonOlder "3.10";
@@ -24,6 +24,10 @@ python3.pkgs.buildPythonApplication {
     pyusb
     pyftdi
   ];
+
+  postInstall = ''
+    install -Dm644 udev/90-sdwire.rules $out/lib/udev/rules.d/90-sdwire.rules
+  '';
 
   pythonImportsCheck = [ "sdwire" ];
 
