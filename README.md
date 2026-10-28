@@ -9,12 +9,18 @@ Please see below for usage:
 ❯ sdwire --help
 Usage: sdwire [OPTIONS] COMMAND [ARGS]...
 
+  SDWire CLI - Control SDWire devices from command line.
+
 Options:
---help  Show this message and exit.
+  --debug    Enable debug output
+  --version  Show the version and exit.
+  --help     Show this message and exit.
 
 Commands:
-list
-switch  dut/target => connects the sdcard interface to target device
+  block-dev  Print the block device path of the SD card, for use in scripts.
+  list       List all connected SDWire devices with their block device...
+  state      Query and display the state of all connected SDWire devices.
+  switch     dut/target => connects the sdcard interface to target device
 
 ❯ sdwire switch --help
 Usage: sdwire switch [OPTIONS] COMMAND [ARGS]...
@@ -130,6 +136,38 @@ Serial			Product Info
 bdgrd_sdwirec_522	[sd-wire::SRPOL]
 
 ❯ sdwire switch host
+```
+
+## Getting the Block Device Path
+
+`sdwire block-dev` prints only the block device path of the SD card (e.g.
+`/dev/sdb`), so it can be used directly in scripts. Errors and warnings go to
+stderr, so stdout stays clean. Like `switch`, use `--serial`/`-s` when more than
+one sdwire is connected.
+
+```
+❯ sdwire switch -s bdgrd_sdwirec_522 host
+❯ sudo bmaptool copy disk.img "$(sdwire block-dev -s bdgrd_sdwirec_522)"
+```
+
+Right after `sdwire switch host` the block device needs a moment to become
+usable: SDWire3 re-enumerates (~2 s) and SDWireC needs the kernel to detect the
+card (up to ~2 s). `block-dev` waits up to 5 seconds for it. If the device
+reports target mode it fails immediately instead of waiting. On macOS, an
+existing disk node is assumed to be usable.
+
+| Exit code | Meaning                                                                    |
+| --------- | -------------------------------------------------------------------------- |
+| 0         | Path printed to stdout                                                     |
+| 1         | Device found but no usable block device (target mode, no SD card, timeout) |
+| 2         | No device, unknown serial, or more than one device without `--serial`      |
+
+```
+❯ sdwire switch target
+❯ sdwire block-dev
+Error: 20120501030900000.1 is in target mode, run 'sdwire switch host' first
+❯ echo $?
+1
 ```
 
 ### SDWire3 and Linux USB power management
