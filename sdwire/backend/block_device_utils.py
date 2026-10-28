@@ -5,6 +5,7 @@ to their corresponding block device paths (e.g., /dev/sda on Linux, /dev/disk2 o
 It uses USB hierarchy and topology information for accurate device mapping.
 """
 
+import os
 import platform
 import logging
 import re
@@ -22,6 +23,43 @@ from sdwire.constants import (
 )
 
 log = logging.getLogger(__name__)
+
+SYSFS_ROOT = "/sys"
+
+
+def _read_sysfs(path: str) -> Optional[str]:
+    try:
+        with open(path) as f:
+            return f.read().strip()
+    except OSError:
+        return None
+
+
+def _sysfs_block_dir(block_dev: str, sysfs_root: str) -> str:
+    return os.path.join(sysfs_root, "class", "block", os.path.basename(block_dev))
+
+
+def is_block_dev_usable(block_dev: str, sysfs_root: str = SYSFS_ROOT) -> bool:
+    """Return True when the block device has a medium and is ready for I/O.
+
+    Card readers (e.g. SDWireC) keep their block device while no medium is
+    present, reporting a size of 0. Uses sysfs only, so no permissions on the
+    device node are needed. Without sysfs (macOS) existence of the node is
+    the best available signal.
+    """
+    if not os.path.isdir(os.path.join(sysfs_root, "class", "block")):
+        return os.path.exists(block_dev)
+    base = _sysfs_block_dir(block_dev, sysfs_root)
+    size = _read_sysfs(os.path.join(base, "size"))
+    if not size or not size.isdigit() or int(size) == 0:
+        return False
+    state = _read_sysfs(os.path.join(base, "device", "state"))
+    return state in (None, "running")
+
+
+def is_block_dev_readonly(block_dev: str, sysfs_root: str = SYSFS_ROOT) -> bool:
+    base = _sysfs_block_dir(block_dev, sysfs_root)
+    return _read_sysfs(os.path.join(base, "ro")) == "1"
 
 
 def map_usb_device_to_block_device(usb_device: usb.core.Device) -> Optional[str]:
