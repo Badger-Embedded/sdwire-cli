@@ -1,4 +1,5 @@
 FROM docker.io/library/python:3.12-slim
+LABEL org.opencontainers.image.source="https://github.com/Badger-Embedded/sdwire-cli"
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends libusb-1.0-0 \
