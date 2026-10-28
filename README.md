@@ -53,6 +53,43 @@ sudo add-apt-repository ppa:tchavadar/badgerd
 sudo apt install python3-sdwire
 ```
 
+Using a container (podman)
+
+```
+podman pull ghcr.io/badger-embedded/sdwire-cli:latest
+# or build locally from the repository root
+podman build -t sdwire -f Containerfile .
+```
+
+## Running in a container
+
+The image's entrypoint is `sdwire`, so arguments are passed directly. The
+container needs access to the host USB devices (and block devices for
+`sdwire list`), the simplest way is `--privileged`:
+
+```
+podman run --rm --privileged ghcr.io/badger-embedded/sdwire-cli list
+podman run --rm --privileged ghcr.io/badger-embedded/sdwire-cli switch dut
+```
+
+Replace the image name with `sdwire` if you built it locally. A shell alias
+makes it feel like a native install:
+
+```
+alias sdwire='podman run --rm --privileged ghcr.io/badger-embedded/sdwire-cli'
+```
+
+> **udev rules are required on the host.** udev runs on the host, not in the
+> container, so install `udev/90-sdwire.rules` there for proper USB access and
+> SDWire3 power management (autosuspend):
+>
+> ```
+> sudo cp udev/90-sdwire.rules /etc/udev/rules.d/
+> sudo udevadm control --reload-rules && sudo udevadm trigger
+> ```
+>
+> Without them, USB access and card switching may fail with permission errors.
+
 ## Listing SDWire Devices
 
 `sdwire list` command will search through usb devices connected to the system

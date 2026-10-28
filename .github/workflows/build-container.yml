@@ -1,0 +1,66 @@
+name: Build container image
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - "[0-9]+.[0-9]+.[0-9]+*"
+    paths:
+      - "Containerfile"
+      - "pyproject.toml"
+      - "poetry.lock"
+      - "sdwire/**"
+      - ".github/workflows/build-container.yml"
+  pull_request:
+    paths:
+      - "Containerfile"
+      - "pyproject.toml"
+      - "poetry.lock"
+      - "sdwire/**"
+      - ".github/workflows/build-container.yml"
+  schedule:
+    - cron: "0 6 * * 1" # 06:00 UTC every Monday, picks up base image updates
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+env:
+  IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
+  IMAGE_NAME: ${{ github.event.repository.name }}
+jobs:
+  build:
+    name: Build container image
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Prepare environment
+        run: |
+          # Registry paths must be lowercase
+          echo "IMAGE_REGISTRY=${IMAGE_REGISTRY,,}" >> "$GITHUB_ENV"
+          echo "IMAGE_NAME=${IMAGE_NAME,,}" >> "$GITHUB_ENV"
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Build image
+        run: podman build -t "$IMAGE_NAME:build" -f Containerfile .
+      - name: Smoke test
+        run: podman run --rm "$IMAGE_NAME:build" --version
+      - name: Login to GitHub Container Registry
+        if: github.event_name != 'pull_request'
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | \
+            podman login ghcr.io -u "${{ github.actor }}" --password-stdin
+      - name: Push to GHCR
+        if: github.event_name != 'pull_request'
+        run: |
+          if [ "${{ github.ref_type }}" = "tag" ]; then
+            TAGS=("${{ github.ref_name }}" latest)
+          elif [ "${{ github.ref }}" = "refs/heads/${{ github.event.repository.default_branch }}" ]; then
+            TAGS=(edge)
+          else
+            exit 0
+          fi
+          for tag in "${TAGS[@]}"; do
+            podman push "$IMAGE_NAME:build" "docker://${IMAGE_REGISTRY}/${IMAGE_NAME}:${tag}"
+          done
