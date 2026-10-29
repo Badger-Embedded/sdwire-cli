@@ -6,7 +6,7 @@
 
 python3.pkgs.buildPythonApplication {
   pname = "sdwire-cli";
-  version = "0.4.0";
+  version = "0.5.0";
   pyproject = true;
 
   disabled = python3.pkgs.pythonOlder "3.10";

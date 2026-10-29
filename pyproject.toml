@@ -1,6 +1,6 @@
 [project]
 name = "sdwire"
-version = "0.4.0"
+version = "0.5.0"
 description = "CLI application to interact with Badgerd SDWire devices"
 authors = [{ name = "Talha Can Havadar", email = "havadartalha@gmail.com" }]
 requires-python = ">=3.12,<4"
