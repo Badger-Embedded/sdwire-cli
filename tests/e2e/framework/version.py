@@ -9,5 +9,5 @@ def expected_version() -> str | None:
     """
     pyproject = Path(__file__).parents[3] / "pyproject.toml"
     if pyproject.is_file():
-        return tomllib.loads(pyproject.read_text())["tool"]["poetry"]["version"]
+        return tomllib.loads(pyproject.read_text())["project"]["version"]
     return None

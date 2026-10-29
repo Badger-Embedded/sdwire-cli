@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication {
   src = ./.;
 
   nativeBuildInputs = with python3.pkgs; [
-    poetry-core
+    hatchling
     pythonRelaxDepsHook
   ];
 

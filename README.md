@@ -188,7 +188,7 @@ echo auto | sudo tee /sys/bus/usb/devices/2-8/power/control
 
 ## Testing
 
-Unit tests: `poetry run pytest tests`.
+Unit tests: `uv run pytest tests`.
 
 End-to-end tests run the installed CLI against simulated devices (umockdev) or
 real hardware. See [tests/e2e/README.md](tests/e2e/README.md).

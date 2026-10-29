@@ -23,7 +23,7 @@ user so permission errors are real:
 ```
 python3 -m venv /tmp/sut && /tmp/sut/bin/pip install .
 python3 -m venv --system-site-packages /tmp/harness
-VIRTUAL_ENV=/tmp/harness poetry install --only e2e --no-root
+UV_PROJECT_ENVIRONMENT=/tmp/harness uv sync --locked --only-group e2e --no-install-project
 SDWIRE_CMD=/tmp/sut/bin/sdwire umockdev-wrapper /tmp/harness/bin/pytest tests/e2e
 ```
 

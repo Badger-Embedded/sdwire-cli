@@ -6,21 +6,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.x'
-      - name: Install pipx
-        run: |
-          sudo apt update
-          sudo apt install pipx
-          pipx ensurepath
-      - name: Install Poetry
-        run: |
-          pipx install poetry==1.8.3
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
       - name: Build
         run: |
-          poetry build
+          uv build
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -54,13 +44,16 @@ jobs:
         run: |
           python -m venv /tmp/sut
           /tmp/sut/bin/pip install dist/*.whl
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
       - name: Install the test harness
+        env:
+          UV_PROJECT_ENVIRONMENT: /tmp/harness
         run: |
           # system python, so the harness can import gi from python3-gi
           /usr/bin/python3 -m venv --system-site-packages /tmp/harness
-          pipx install poetry
           # only the locked e2e group, the CLI under test comes from the wheel
-          VIRTUAL_ENV=/tmp/harness poetry install --only e2e --no-root
+          uv sync --locked --only-group e2e --no-install-project
       - name: Run e2e tests
         env:
           SDWIRE_CMD: /tmp/sut/bin/sdwire
