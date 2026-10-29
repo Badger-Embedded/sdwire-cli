@@ -8,7 +8,7 @@ on:
     paths:
       - "Containerfile"
       - "pyproject.toml"
-      - "poetry.lock"
+      - "uv.lock"
       - "sdwire/**"
       - "tests/e2e/**"
       - ".github/workflows/build-container.yml"
@@ -16,7 +16,7 @@ on:
     paths:
       - "Containerfile"
       - "pyproject.toml"
-      - "poetry.lock"
+      - "uv.lock"
       - "sdwire/**"
       - "tests/e2e/**"
       - ".github/workflows/build-container.yml"
