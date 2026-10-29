@@ -23,7 +23,7 @@ sdwire = "sdwire:main.main"
 
 [dependency-groups]
 dev = [
-    "black>=24.8.0,<25",
+    "black>=24.8.0,<27",
     "pytest>=9.2.0,<10",
 ]
 # harness of the end-to-end tests (tests/e2e), installed on its own in CI
