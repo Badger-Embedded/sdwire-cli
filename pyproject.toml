@@ -15,7 +15,7 @@ pyftdi = "^0.56.0"
 
 
 [tool.poetry.group.dev.dependencies]
-black = "^24.8.0"
+black = ">=24.8,<27.0"
 pytest = "^9.2.0"
 
 # harness of the end-to-end tests (tests/e2e), installed on its own in CI
