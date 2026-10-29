@@ -26,12 +26,52 @@ jobs:
         with:
           name: python-sdwire-dists
           path: dist/
+  e2e-wheel:
+    name: E2E tests (simulated) of the wheel on Python ${{ matrix.python-version }}
+    needs:
+      - build
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        python-version: ['3.12', '3.14']
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Download dists
+        uses: actions/download-artifact@v4
+        with:
+          name: python-sdwire-dists
+          path: dist/
+      - name: Install umockdev
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            umockdev gir1.2-umockdev-1.0 python3-gi python3-venv
+      - name: Install the CLI under test from the wheel
+        run: |
+          python -m venv /tmp/sut
+          /tmp/sut/bin/pip install dist/*.whl
+      - name: Install the test harness
+        run: |
+          # system python, so the harness can import gi from python3-gi
+          /usr/bin/python3 -m venv --system-site-packages /tmp/harness
+          pipx install poetry
+          # only the locked e2e group, the CLI under test comes from the wheel
+          VIRTUAL_ENV=/tmp/harness poetry install --only e2e --no-root
+      - name: Run e2e tests
+        env:
+          SDWIRE_CMD: /tmp/sut/bin/sdwire
+        run: umockdev-wrapper /tmp/harness/bin/pytest tests/e2e --backend=sim
   pypi-publish:
     name: Publish Python 🐍 sdwire 📦 to PyPI
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/') # only publish to PyPI on tag pushes
     needs:
       - build
+      - e2e-wheel
     environment:
       name: pypi
       url: https://pypi.org/p/sdwire
@@ -49,6 +89,7 @@ jobs:
     name: Publish Python 🐍 sdwire 📦 to TestPyPI
     needs:
       - build
+      - e2e-wheel
     runs-on: ubuntu-latest
     continue-on-error: true
     environment:

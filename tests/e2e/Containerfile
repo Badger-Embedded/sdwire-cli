@@ -1,0 +1,21 @@
+# Test-only image: the unchanged release image plus the e2e harness.
+#   podman build -f tests/e2e/Containerfile --build-arg BASE=<release image> -t sdwire-e2e .
+#   podman run --rm sdwire-e2e [pytest args]
+ARG BASE
+FROM ${BASE}
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        umockdev gir1.2-umockdev-1.0 python3-gi \
+        python3-pytest python3-pytest-timeout python3-syrupy \
+    && rm -rf /var/lib/apt/lists/* \
+    && useradd --create-home tester
+
+COPY --chown=tester tests/e2e /src/tests/e2e
+WORKDIR /src
+# non-root, so permission errors on sysfs are real
+USER tester
+ENV SDWIRE_CMD=/usr/local/bin/sdwire
+# the harness uses Debian's python3, the CLI under test the image's own python
+ENTRYPOINT ["umockdev-wrapper", "/usr/bin/python3", "-m", "pytest", "tests/e2e", "--backend=sim", "-p", "no:cacheprovider"]
+CMD []

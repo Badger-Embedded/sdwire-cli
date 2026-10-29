@@ -20,10 +20,10 @@ def handle_switch_host_command(ctx: click.Context) -> None:
     """Handle switching device to host/TS mode.
 
     Args:
-        ctx: Click context containing device information
+        ctx: Click context holding the serial passed to `switch`
     """
+    device = select_device(ctx.obj["serial"])
     try:
-        device = ctx.obj["device"]
         device.switch_ts()
     except Exception as e:
         log.error(f"Failed to switch to host mode: {e}")
@@ -35,10 +35,10 @@ def handle_switch_target_command(ctx: click.Context) -> None:
     """Handle switching device to target/DUT mode.
 
     Args:
-        ctx: Click context containing device information
+        ctx: Click context holding the serial passed to `switch`
     """
+    device = select_device(ctx.obj["serial"])
     try:
-        device = ctx.obj["device"]
         device.switch_dut()
     except Exception as e:
         log.error(f"Failed to switch to target mode: {e}")
@@ -50,10 +50,10 @@ def handle_switch_off_command(ctx: click.Context) -> None:
     """Handle switching device to off mode.
 
     Args:
-        ctx: Click context containing device information
+        ctx: Click context holding the serial passed to `switch`
     """
+    device = select_device(ctx.obj["serial"])
     try:
-        device = ctx.obj["device"]
         if isinstance(device, (SDWireC, SDWire)):
             log.info(
                 "SDWire3, SDWireC or legacy sdwire devices don't have off functionality"
@@ -89,14 +89,16 @@ def select_device(serial: str | None) -> SDWire | SDWireC:
 
 
 def handle_switch_command(ctx, serial):
-    ctx.obj["device"] = select_device(serial)
+    # the device is selected by the subcommand, so `switch <cmd> --help`
+    # works without a connected device
+    ctx.obj["serial"] = serial
 
 
 def handle_state_command(ctx, serial):
     """Handle querying device state.
 
     Args:
-        ctx: Click context containing device information
+        ctx: Click context holding the serial passed to `switch`
         serial: Serial number of the device to query
     """
     ctx.obj["device"] = select_device(serial)

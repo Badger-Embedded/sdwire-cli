@@ -18,6 +18,12 @@ pyftdi = "^0.56.0"
 black = "^24.8.0"
 pytest = "^9.2.0"
 
+# harness of the end-to-end tests (tests/e2e), installed on its own in CI
+[tool.poetry.group.e2e.dependencies]
+pytest = "^9.2.0"
+pytest-timeout = "^2.4.0"
+syrupy = "^6.1.1"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

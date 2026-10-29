@@ -1,0 +1,133 @@
+# serializer version: 1
+# name: test_help[--help]
+  tuple(
+    0,
+    '''
+      Usage: sdwire [OPTIONS] COMMAND [ARGS]...
+      
+        SDWire CLI - Control SDWire devices from command line.
+      
+      Options:
+        --debug    Enable debug output
+        --version  Show the version and exit.
+        --help     Show this message and exit.
+      
+      Commands:
+        block-dev  Print the block device path of the SD card, for use in scripts.
+        list       List all connected SDWire devices with their block device...
+        state      Query and display the state of all connected SDWire devices.
+        switch     dut/target => connects the sdcard interface to target device
+  
+    ''',
+    '',
+  )
+# ---
+# name: test_help[block-dev --help]
+  tuple(
+    0,
+    '''
+      Usage: sdwire block-dev [OPTIONS]
+      
+        Print the block device path of the SD card, for use in scripts.
+      
+        Only the path (e.g. /dev/sdb) is printed to stdout; errors and warnings go
+        to stderr. Right after switching to host it waits up to 5 seconds for the
+        block device to become usable. Exits with 1 when the device is in target
+        mode or no usable block device appears.
+      
+        Examples:
+            bmaptool copy disk.img "$(sdwire block-dev -s <serial>)"
+            sdwire switch host && dev=$(sdwire block-dev) && dd if=disk.img of="$dev" bs=4M
+      
+      Options:
+        -s, --serial TEXT  Serial number of the sdwire device, if there is only one
+                           sdwire connected then it will be used by default
+        --help             Show this message and exit.
+  
+    ''',
+    '',
+  )
+# ---
+# name: test_help[list --help]
+  tuple(
+    0,
+    '''
+      Usage: sdwire list [OPTIONS]
+      
+        List all connected SDWire devices with their block device information.
+      
+      Options:
+        --help  Show this message and exit.
+  
+    ''',
+    '',
+  )
+# ---
+# name: test_help[no-args]
+  tuple(
+    2,
+    '',
+    '''
+      Usage: sdwire [OPTIONS] COMMAND [ARGS]...
+      
+        SDWire CLI - Control SDWire devices from command line.
+      
+      Options:
+        --debug    Enable debug output
+        --version  Show the version and exit.
+        --help     Show this message and exit.
+      
+      Commands:
+        block-dev  Print the block device path of the SD card, for use in scripts.
+        list       List all connected SDWire devices with their block device...
+        state      Query and display the state of all connected SDWire devices.
+        switch     dut/target => connects the sdcard interface to target device
+  
+    ''',
+  )
+# ---
+# name: test_help[state --help]
+  tuple(
+    0,
+    '''
+      Usage: sdwire state [OPTIONS]
+      
+        Query and display the state of all connected SDWire devices.
+      
+      Options:
+        -s, --serial TEXT  Serial number of the sdwire device, if there is only one
+                           sdwire connected then it will be used by default
+        --help             Show this message and exit.
+  
+    ''',
+    '',
+  )
+# ---
+# name: test_help[switch --help]
+  tuple(
+    0,
+    '''
+      Usage: sdwire switch [OPTIONS] COMMAND [ARGS]...
+      
+        dut/target => connects the sdcard interface to target device
+      
+        ts/host => connects the sdcard interface to host machine
+      
+        off => disconnects the sdcard interface from both host and target
+      
+      Options:
+        -s, --serial TEXT  Serial number of the sdwire device, if there is only one
+                           sdwire connected then it will be used by default
+        --help             Show this message and exit.
+      
+      Commands:
+        dut     dut/target => connects the sdcard interface to target device
+        host    ts/host => connects the sdcard interface to host machine
+        off     off => disconnects the sdcard interface from both host and target
+        target  dut/target => connects the sdcard interface to target device
+        ts      ts/host => connects the sdcard interface to host machine
+  
+    ''',
+    '',
+  )
+# ---
