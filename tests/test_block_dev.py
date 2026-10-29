@@ -1,12 +1,7 @@
-import functools
-import logging
-
 import pytest
-from click.testing import CliRunner
 
 from sdwire.backend import utils
 from sdwire.backend.block_device_utils import is_block_dev_readonly, is_block_dev_usable
-from sdwire.main import main
 
 
 class FakeClock:
@@ -74,55 +69,6 @@ def clock():
     return FakeClock()
 
 
-@pytest.fixture
-def cli(monkeypatch, clock):
-    """Run the CLI against fake devices with a fake clock and fake sysfs."""
-    state = {"devices": [], "ready": {}, "readonly": set()}
-    monkeypatch.setattr(utils.detect, "get_sdwire_devices", lambda: state["devices"])
-    monkeypatch.setattr(
-        utils, "is_block_dev_readonly", lambda dev: dev in state["readonly"]
-    )
-    real = utils.resolve_block_dev
-    monkeypatch.setattr(
-        utils,
-        "resolve_block_dev",
-        lambda device: real(
-            device,
-            sleep=clock.sleep,
-            clock=clock.clock,
-            usable=usable_after(clock, state["ready"]),
-        ),
-    )
-
-    def run(args, devices, ready=None, readonly=()):
-        state.update(devices=devices, ready=ready or {}, readonly=set(readonly))
-        try:
-            runner = CliRunner(mix_stderr=False)  # click < 8.2
-        except TypeError:
-            runner = CliRunner()
-        return runner.invoke(main, args)
-
-    return run
-
-
-def test_prints_only_path_when_usable(cli, clock):
-    dev = FakeDevice(block_devs=["/dev/sdb"])
-    result = cli(["block-dev"], [dev], ready={"/dev/sdb": 0})
-    assert result.exit_code == 0
-    assert result.stdout == "/dev/sdb\n"
-    assert result.stderr == ""
-    assert clock.sleeps == [] and dev.refreshes == 0
-
-
-def test_target_mode_fails_without_waiting(cli, clock):
-    dev = FakeDevice(block_devs=[None], states=[False])
-    result = cli(["block-dev"], [dev])
-    assert result.exit_code == 1
-    assert result.stdout == ""
-    assert "target mode" in result.stderr
-    assert clock.sleeps == []
-
-
 def test_waits_for_sdwire3_to_reenumerate(clock):
     # measured: SDWire3 node appears ~2s after switching to host
     dev = FakeDevice(block_devs=[None] * 8 + ["/dev/sdb"], states=[True])
@@ -144,15 +90,6 @@ def test_waits_for_sdwirec_medium(clock):
     assert clock.now == pytest.approx(0.75)
 
 
-def test_sdwirec_without_medium_fails_at_timeout(cli, clock):
-    dev = FakeDevice(block_devs=["/dev/sda"])
-    result = cli(["block-dev"], [dev])
-    assert result.exit_code == 1
-    assert result.stdout == ""
-    assert "/dev/sda has no medium" in result.stderr
-    assert clock.now == pytest.approx(5.0)
-
-
 def test_state_query_error_is_treated_as_unknown(clock):
     dev = FakeDevice(block_devs=[None, "/dev/sdb"], state_error=RuntimeError("boom"))
     assert resolve(dev, clock, {"/dev/sdb": 0}) == "/dev/sdb"
@@ -163,62 +100,6 @@ def test_switch_to_target_while_waiting_fails_fast(clock):
     with pytest.raises(utils.BlockDevError, match="target mode"):
         resolve(dev, clock, {})
     assert clock.now == pytest.approx(0.5)
-
-
-def test_write_protected_card_warns_on_stderr(cli):
-    dev = FakeDevice(block_devs=["/dev/sdb"])
-    result = cli(["block-dev"], [dev], ready={"/dev/sdb": 0}, readonly=["/dev/sdb"])
-    assert result.exit_code == 0
-    assert result.stdout == "/dev/sdb\n"
-    assert "write-protected" in result.stderr
-
-
-def test_debug_logging_keeps_stdout_clean(cli, caplog):
-    dev = FakeDevice(block_devs=[None, "/dev/sdb"], states=[True])
-    with caplog.at_level(logging.DEBUG):
-        result = cli(["--debug", "block-dev"], [dev], ready={"/dev/sdb": 0})
-    assert result.exit_code == 0
-    assert result.stdout == "/dev/sdb\n"
-    assert "waiting up to 5s" in caplog.text
-
-
-def test_serial_selects_device(cli):
-    devices = [
-        FakeDevice("a", block_devs=["/dev/sda"]),
-        FakeDevice("b", block_devs=["/dev/sdb"]),
-    ]
-    result = cli(
-        ["block-dev", "-s", "b"], devices, ready={"/dev/sda": 0, "/dev/sdb": 0}
-    )
-    assert result.exit_code == 0
-    assert result.stdout == "/dev/sdb\n"
-
-
-def with_serial(serial):
-    return ["-s", serial] if serial else []
-
-
-SELECTING_COMMANDS = {
-    "block-dev": lambda serial: ["block-dev", *with_serial(serial)],
-    "state": lambda serial: ["state", *with_serial(serial)],
-    "switch": lambda serial: ["switch", *with_serial(serial), "host"],
-}
-
-
-@pytest.mark.parametrize("command", SELECTING_COMMANDS)
-@pytest.mark.parametrize(
-    "devices,serial,message",
-    [
-        ([], None, "no sdwire device connected"),
-        ([FakeDevice("a"), FakeDevice("b")], None, "--serial"),
-        ([FakeDevice("a")], "x", "serial=x"),
-    ],
-)
-def test_device_selection_errors(cli, command, devices, serial, message):
-    result = cli(SELECTING_COMMANDS[command](serial), devices)
-    assert result.exit_code == 2
-    assert result.stdout == ""
-    assert message in result.stderr
 
 
 def make_block_sysfs(tmp_path, name="sdb", size="31116288", state="running", ro="0"):

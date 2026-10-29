@@ -185,3 +185,10 @@ To do it by hand (replace `2-8` with your device's sysfs name, e.g. `5-1`):
 echo 0    | sudo tee /sys/bus/usb/devices/2-8/power/autosuspend_delay_ms
 echo auto | sudo tee /sys/bus/usb/devices/2-8/power/control
 ```
+
+## Testing
+
+Unit tests: `poetry run pytest tests`.
+
+End-to-end tests run the installed CLI against simulated devices (umockdev) or
+real hardware. See [tests/e2e/README.md](tests/e2e/README.md).
