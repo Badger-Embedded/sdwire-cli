@@ -6,32 +6,16 @@ authors = [{ name = "Talha Can Havadar", email = "havadartalha@gmail.com" }]
 requires-python = ">=3.12,<4"
 readme = "README.md"
 license = "GPL-3.0-only"
-classifiers = [
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3.13",
-    "Programming Language :: Python :: 3.14",
-]
-dependencies = [
-    "click>=8.1.7,<9",
-    "pyusb>=1.2.1,<2",
-    "pyftdi>=0.56.0,<0.57",
-]
+classifiers = ["Programming Language :: Python :: 3"]
+dependencies = ["click>=8.1.7,<9", "pyusb>=1.2.1,<2", "pyftdi>=0.56.0,<0.57"]
 
 [project.scripts]
 sdwire = "sdwire:main.main"
 
 [dependency-groups]
-dev = [
-    "black>=24.8.0,<27",
-    "pytest>=9.2.0,<10",
-]
+dev = ["black>=24.8.0,<27", "pytest>=9.2.0,<10"]
 # harness of the end-to-end tests (tests/e2e), installed on its own in CI
-e2e = [
-    "pytest>=9.2.0,<10",
-    "pytest-timeout>=2.4.0,<3",
-    "syrupy>=6.1.1,<7",
-]
+e2e = ["pytest>=9.2.0,<10", "pytest-timeout>=2.4.0,<3", "syrupy>=6.1.1,<7"]
 
 [tool.hatch.build.targets.sdist]
 include = ["sdwire"]
